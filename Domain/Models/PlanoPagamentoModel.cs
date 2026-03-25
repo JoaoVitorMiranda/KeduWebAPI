@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Domain.Models
 {
@@ -19,7 +20,10 @@ namespace Domain.Models
 
         public List<CobrancaModel> Cobranca { get; set; }
 
+        [JsonIgnore]
         public ResponsavelFinanceiroModel ResponsavelFinanceiro { get; set; }
+
+        [JsonIgnore]
         public CentroDeCustoModel CentroDeCusto { get; set; }
     }
 }

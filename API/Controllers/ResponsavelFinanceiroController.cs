@@ -9,11 +9,19 @@ using System.Threading.Tasks;
 
 namespace API.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing financial responsibles.
+    /// </summary>
     public class ResponsavelFinanceiroController : DefaultController
     {
         private readonly IResponsavelFinanceiroService _responsavelFinanceiroService;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ResponsavelFinanceiroController"/> class.
+        /// </summary>
+        /// <param name="responsavelFinanceiroService">Service for managing financial responsibles.</param>
+        /// <param name="mapper">AutoMapper instance for model mapping.</param>
         public ResponsavelFinanceiroController(
             IResponsavelFinanceiroService responsavelFinanceiroService,
             IMapper mapper)
@@ -22,8 +30,10 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-
-
+        /// <summary>
+        /// Obtém todos os responsáveis financeiros.
+        /// </summary>
+        /// <returns>Uma lista de modelos de responsáveis financeiros.</returns>
         [HttpGet]
         public async Task<IEnumerable<ResponsavelFinanceiroModel>> GetAll()
         {
@@ -33,21 +43,18 @@ namespace API.Controllers
             return model;
         }
 
-        [HttpGet()]
-        public async Task<ActionResult<ResponsavelFinanceiroModel>> GetById(int id)
-        {
-            var responsavelFinanceiro = await _responsavelFinanceiroService.GetByIdAsync(id);
 
-            if (responsavelFinanceiro == null)
-                return NotFound();
-
-            var model = _mapper.Map<ResponsavelFinanceiroModel>(responsavelFinanceiro);
-
-            return model;
-        }
-
+        /// <summary>
+        /// Cria um novo responsável financeiro.
+        /// </summary>
+        /// <param name="obj">Objeto com os dados do responsável financeiro.</param>
+        /// <returns>Resultado da operação.</returns>
         [HttpPost]
-        public async Task<ResponseResult> Create(ResponsavelFinanceiroModel obj)
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(ResponseResult), 200)]
+        [ProducesResponseType(typeof(ResponseResult), 400)]
+        [ProducesResponseType(500)]
+        public async Task<ResponseResult> Create([FromBody] ResponsavelFinanceiroModel obj)
         {
             var result = new ResponseResult();
             try
@@ -63,44 +70,6 @@ namespace API.Controllers
                 result.IsError = true;
             }
 
-            return result;
-        }
-
-        [HttpPut()]
-        public async Task<ResponseResult> Update(ResponsavelFinanceiroModel obj)
-        {
-            var result = new ResponseResult();
-            try
-            {
-                if (obj == null || obj.Id == 0)
-                    throw new ArgumentException("BadRequest");
-
-                var entidade = _mapper.Map<ResponsavelFinanceiro>(obj);
-                await _responsavelFinanceiroService.UpdateAsync(entidade);
-                result.Message = "Sucesso!";
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                result.IsError = true;
-            }
-            return result;
-        }
-
-        [HttpDelete()]
-        public async Task<ResponseResult> Delete(int id)
-        {
-            var result = new ResponseResult();
-            try
-            {
-                await _responsavelFinanceiroService.RemoveAsync(id);
-                result.Message = "Sucesso!";
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-                result.IsError = true;
-            }
             return result;
         }
     }

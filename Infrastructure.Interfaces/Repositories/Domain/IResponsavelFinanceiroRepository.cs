@@ -8,5 +8,7 @@ namespace Infrastructure.Interfaces.Repositories.Domain
 {
     public interface IPlanoPagamentoRepository : IDomainRepository<PlanoPagamento>
     {
+        Task<IEnumerable<ValorTotalPagamentoModel>> BuscarValorTotalPagamento();
+        Task<IEnumerable<PlanoPagamentoModel>> BuscarPlanosPagamentoPorIdResponsavel(int idResponsavel);
     }
 }

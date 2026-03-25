@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace API
 {
@@ -29,6 +30,7 @@ namespace API
             services.AddSingleton(Configuration);
             services.AddOptions();
             services.AddControllers();/*.AddNewtonsoftJson();*/
+            services.AddEndpointsApiExplorer();
             services.AddMvcCore();/*.AddNewtonsoftJson().AddDataAnnotations();*/
             services.AddSingleton(AutoMapperConfig.RegisterMappings());
 
@@ -41,6 +43,9 @@ namespace API
             // Register the Swagger generator, defining 1 or more Swagger documents
             services.AddSwaggerGen(c =>
             {
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",

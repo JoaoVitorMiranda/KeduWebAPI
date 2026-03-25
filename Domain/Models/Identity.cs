@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Domain.Models
 {
@@ -6,6 +7,8 @@ namespace Domain.Models
     public class Identity
     {
         public int Id { get; set; }
+
+        [JsonIgnore]
         public string Token { get; set; }
     }
 }

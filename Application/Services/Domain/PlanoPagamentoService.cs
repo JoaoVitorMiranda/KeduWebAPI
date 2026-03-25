@@ -1,7 +1,11 @@
 ﻿using Application.Interfaces.Services.Domain;
 using Application.Services.Standard;
+using Domain.Models;
 using Infrastructure.Domain.Entities;
 using Infrastructure.Interfaces.Repositories.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Services.Domain
@@ -18,21 +22,30 @@ namespace Application.Services.Domain
 
         public override async Task<PlanoPagamento> AddAsync(PlanoPagamento responsavel)
         {
-            #region .: Validações :.
+            try
+            {
+                #region .: Validações :.
+                decimal valorTotal = responsavel.Cobranca.Sum(x => x.Valor);
+                responsavel.ValorTotalPlano = valorTotal;
+                #endregion
 
-            #endregion
-
-            var user = await _repository.AddAsync(responsavel);
-            return user;
+                var user = await _repository.AddAsync(responsavel);
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
-        public override async Task UpdateAsync(PlanoPagamento responsavel)
+        public async Task<IEnumerable<ValorTotalPagamentoModel>> BuscarValorTotalPagamento()
         {
-            #region .: Validações :.
+            return await _repository.BuscarValorTotalPagamento();
+        }
 
-            #endregion
-
-            await _repository.UpdateAsync(responsavel);
+        public async Task<IEnumerable<PlanoPagamentoModel>> BuscarPlanosPagamentoPorIdResponsavel(int idResponsavel)
+        {
+            return await _repository.BuscarPlanosPagamentoPorIdResponsavel(idResponsavel);
         }
     }
 }

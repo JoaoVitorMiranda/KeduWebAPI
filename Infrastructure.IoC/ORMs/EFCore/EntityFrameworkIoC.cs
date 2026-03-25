@@ -15,7 +15,7 @@ namespace Infrastructure.IoC.ORMs.EFCore
         {
             IConfiguration dbConnectionSettings = ResolveConfiguration.GetConnectionSettings(configuration);
             string connectionString = dbConnectionSettings.GetConnectionString("DefaultConnection");
-            services.AddDbContext<ApplicationContext>(options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+            services.AddDbContext<ApplicationContext>(options => options.UseNpgsql(connectionString));
 
             services.AddScoped(typeof(IRepositoryAsync<>), typeof(RepositoryAsync<>));
             services.AddScoped<IPlanoPagamentoRepository, PlanoPagamentoRepository>();
